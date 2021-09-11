@@ -1,0 +1,349 @@
+artisan is command line interface
+
+-in laravel Http file contain the controllers, resources folder contain view and models is related to db
+it largly related to MVC
+
+- `php --ini` inside terminal to see which files are used by PHP in CLI mode
+
+we use route which inside web.php in the view and web.php is linked to the controller and the controller is linked to db
+we can change the map of this but this is how it usually happen
+
+db part ~19:00
+
+-npm run  this for installing packages in the json file
+
+-php artisan serve run the server
+
+-channels.php file is for broadcasting 
+
+-console.php file is for any artisan commands
+
+-laravel templating engine recognize any file with blade.php specilly as blade file which we can use the blade syntax in it
+
+-index.blade.php used for template 
+
+-@extends and @endsection laravel blade directives or blade syntax
+
+-when write return view ('posts.index'); in web.php that mean directory returninig posts=>index here index file inherit from layouts which contain app.blade.php file at the moment 10:34 also must chnge the route here> Route::get('/posts', function () {
+
+-laravel-mix in package.json which we will use to pull tailwind into our project
+
+-12:00 files and command which related to js and css files which we might have to use in future
+
+-webpack.mix.js is laravel-mix file which is third party plugin which control in css and js files in above line which allow to manage our assets
+
+-we want to pull in all the css asstes in webpack.mix.js file => go to tailwind site 12:58 =>and pipe it in app.css file that will include the base components and utilities of tailwind and it almost happen for any other framework
+
+-we need to publish talwind config file
+
+-we use npm run dev in many updates or to install dependencies
+
+-we will try to compress and remove inised classes in the css file bec it is huge
+
+-<link rel="stylesheet" href="{{ asset('css/app.css') }}"> => laravel helper function alot is existed in the docs of laravel
+
+-now whatever we write in app.blade.php 
+
+-in the course there is three tables but in the real app there is  four 
+
+-tables are for find out the database schema of every type we want to create in our app include all the columns hich inside of it, if we added or removed column a migration is created
+
+-all have up and down methods which are the reverse of we are doing 
+
+-configure db through .env file
+
+-we can find db connections in config>database.php file directory 
+
+-php artisan migrate => run the db migrations 
+
+-php artisan make:migration add_username_to_users_table command used to create a table called add_username_to_users_table inside migrations folder
+
+-php artisan migrate:rollback to remove the last migration
+
+-the point of migration is keeping the db in nice state so when we remove something the production env run one command and entire db included if any changes created 
+
+-user migrations are existed by default
+
+
+
+-models represents the data inside the db => related to ORM in laravel
+
+-we can use user model in app=>Models User.php to create , update  or do anything with our db
+
+-php artisan make:controller RegisterController     used to make controller we can make through other ways
+
+-php artisan make:controller Auth\\RegisterController it will put Register..... in Auth folder inside controllers folder which is sub directory
+
+-any file in views will can be accessed through the browser by http://127.0.0.1:8000/filename 
+
+-any route we have in web.php file must have model and view and controller or it will give error view have the html , model is db or any thing rel to it and controller is for methods and functions
+
+- <a href="{{ route('rergister') }}" class="p-3">Register</a> we used laravel blade template which is return to register uri in web.php file
+
+-and chaining this route Route::get('/register', [RegisterController::class, 'index'])->name('register'); by name give penefit to access this uri even we changed the route path like Route::get('/auth/register', [RegisterController::class, 'index'])->name('register'); 
+
+-all blade files are in views  
+
+
+-public function store()
+    {
+        dd('jhbuh');
+    }the dd die dumb used to kill the page nothing happen it will give page expired 
+
+-for laravel any form we sumit is subjected to @csrf Cross-Site Request Forgery which is rel to securiry => make sure person submitting form intending to submit that form this will show the user what inside the dd function and route him to it
+
+
+-in store function in registerController file we will validate user then store user then sign the user in then redirect him
+
+
+-dd($request); we can extract alot of info from this method request
+
+
+  -> is used to call a method, or access a property, on the object of a class
+  => is used to assign values to the keys of an array
+
+-base controller in laravel can validate the request in controller file and if the validation fails it will throw an error contain all info,
+
+-all validation rules are explained in docs of laravel
+
+- 'password' => 'required|confirmed', it will look for any other we submitted with _confirmation and make sure it match  
+
+- @error('name')
+    <div class="text-red-500 mt-t text-sm">
+        {{ $message }}
+    </div>
+  @enderror
+by default it gives the first error which is the name field is required
+
+-@error('name') border-red-500 @enderror this part inside a class of tag specify a specific style when error happen
+
+-value="{{ old('name') }} inside tag save old data in case we got error or page updated
+
+-'password'=>Hash::make($requst->password), short access functionality 
+
+-dd(auth()->user()); return a user object contain all info imside db about him
+
+- we used if blade template in app.blade.php file 
+		@if (auth()->user())
+                    <li>
+                        <a href="" class="p-3">Mohamad Mgahid</a>
+                    </li>
+                    <li>
+                    <a href="" class="p-3">Logout</a>
+                    </li>
+                @else
+                    <li>
+                        <a href="" class="p-3">Login</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" class="p-3">Register</a>
+                    </li> 
+                @endif
+ 
+we used it another way
+		 @auth
+                    <li>
+                        <a href="" class="p-3">Mohamad Mgahid</a>
+                    </li>
+                    <li>
+                    <a href="" class="p-3">Logout</a>
+                    </li>
+                @endauth
+
+                @guest
+                    <li>
+                        <a href="" class="p-3">Login</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" class="p-3">Register</a>
+                    </li>
+                @endguest
+
+the login.blade.php file similar to register but without password confirmation or name or username
+
+-we give any request in any function we use the (Request $request) parameter
+
+-return back is a show card for redirecting the last page 
+
+- any view we create must add it's route to app.blade.php to its specific link
+
+-we use session helper to check if we got a key in pur session put something 
+ @if (session('status'))
+                {{ session('status') }}
+            @endif
+this give invalid credentials notice 
+
+-we changed the architecture of the site many times in order give the right views to the right user
+or give right or properiate view to the current situation in ~ 52:00++ 
+
+-<form action="{{ route('logout') }}" method="post" class="p-3 inline" >
+                            @csrf
+                            <buttin type=" submit">Logout</button>   
+                        </form>
+we did this part in app.blade.php like to secure somwthing related to csrf
+
+-middleware have already bundle middleware for us
+
+-kernel.php inmiddleware is the global middle ware which run for every request in our app, check things modify the req
+'auth' => \App\Http\Middleware\Authenticate::class, we will use this line in kernel.php to prevent user who are not signed in from accessing the dashboard page
+the Authenticate.php checks if the the user is signed in otherwise it is regected 
+if (! $request->expectsJson()) {
+            return route('login');
+    } 
+      
+
+- public function __construct()
+    {
+        $this->middleware(['guest']);
+    }
+in registerController.php to prevent user who is already signed in to see the register page it doesnot make sense
+it prevent accessing all methods which under it to appear to the user
+it use this line in redirectAuthenticated.php to redirect him to home page
+return redirect(RouteServiceProvider::HOME);  
+
+- dd(auth()->user())->name;        this will return name only instead of all data in db
+
+-$request->remember it remember the user log in and kepp logged in 
+rememeber is a method inside request class
+
+-  =>  ~~posts Part 1:06:09~~
+
+
+-php artisan make:model modelName -help => this command give all model commands we can use rel to db
+
+-php artisan make:model Post -m -f it make migration and factory ******
+$table->timestamps(); this in migrations files in migration folder define when created when updated
+
+-laravel automatically maos the posts of user to his id
+
+-focus on archtecture or building of the app ~1:14:00
+
+-collection 1:18:00 powerful tool in laravel
+
+-{{ $post->created_at->toTimeString() }} show date in simpler view
+
+-{{ $post->created_at->diffForHumans() }} show it like three min ago ...=
+
+-$posts = Post::get(); //it is laravel collection will return all posts in db in same order
+
+
+-$posts = Post::paginate(2); instead of getting all posts which maybe million we determine only 2 posts to be displayed per page or any num we want 
+
+-{{ $posts->links }} how do we output pagination length we put inside the if statement like one in index.blade.php -- useful
+
+-laravel tinker allow us to   .. our shell to run commans within laravel
+
+-use PostFactory.php to generate our long list of posts testing them -> unit test and feature test or to seed data in our db so we can test with it 
+we created the factory when we used -f in php artisan make:model Post -m -f command
+
+-php artisan tinker this command opens the laravel shell
+
+-  return [
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+        ];
+        in UserFactory.php create fake data to use like create fake user
+
+
+-App\Models\Post::factory()->times(200)->create(['user_id'=>2]);  we used this inside laravell shell 'tinker' to create 200 fake user id 
+it did not work be  we have no db
+
+
+-                        liking & unlinking 1:33:45
+
+
+we usually use @csrf in the begin of form
+
+-  <span>{{ $post->likes->count() }} {{ Str::plural('like', 
+    $post->likes->count()) }}</span> this count how many likes and give it a suitable expln as if 1 like or 3 likes 
+
+
+
+-import in User.php might be wrong 
+
+-action="{{ route('posts.likes', $post->id) }}" this action inside form index.blade.php $post->id inject the id of like into route related in the web.php file
+every like has id
+
+-User $user means takes object from User class
+
+
+-return $this->likes->contains('user_id', $user->id) it return boolean value whether the user is already inside the likes or not
+
+
+-we will put like and unlike form in if statement to give the user one of two choices either he like the post or unlike it
+
+-public function __construct()
+    {
+        $this->middleware(['auth']);
+    } 
+to add some authenticated middleware prevent unauthenticated to like
+
+
+-@method('DELETE') method spoofing we put this method directly inside the index.blade.php to delete the like from db
+keep things nice and restful
+
+- $request->user()->likes()->where('post_id', $post->id)->delete();
+this mean go to user likes relationship where post id which try to unlike = post id in db and delete it 
+
+-we put like and unlike forms in @auth statment to make sure the user already signed in before showing him like option
+if not the visitor cn only see the likes
+
+-ordering posts part 1:57:40
+
+-when write (User $user, Post $post) we paste curently authinticated user in postpolicy.php file, post is the model we trying to do particular thing for
+
+-when write $user->name that way it means go to user object and get the name property
+
+-deleting the model make it anonymous component
+
+-likes is function inisde user.php model file we can use
+
+-  2:15:16 setting up mail credentials inside .env file line ~ 26
+we did not make it bec it is not free any more 
+
+-php artisan make:mail mailTemplateName => it create a new markdown template for mailable 
+
+-php artisan make:mail PostLiked --markdown=emails.posts.post_liked => 
+php artisan make:mail PostLiked --markdown=emails.posts.post_liked this part for the view we want to store this in the markdown template that we will create
+it will create post_liked.php file and as model and post_liked.blade.php as view 
+
+-Mail::to($user)->send(new PostLiked()); to send mail to the current creator of the post user an instance of as such postLiked.php  
+we put this in the DashboardController.php
+
+-we can chain any method inside PostLiked.php file 
+such like this method inside it
+return $this->markdown('emails.posts.post_liked')
+        ->subject('Somone liked your post');
+all customized from the post_liked.blade.php template 
+
+-we wnat to send only one mail for liking or unliking in order to prevent sending many mails 
+                  ~2:22:00
+  so we will think about soft deleting 
+
+-soft deleting doesn't actually delete object from db it mark it as deleted in a column 
+we need to tell this model has soft delete simply add this use HasFactory, SoftDeletes; into like.php
+we ddon't delete we press the unlike 
+
+-we can also modify the postlikecontroller.php to send email only if no prevous likes has been created instead of soft delete
+
+logout part ~ 2:26:40
+
+just put the form of posts in index.blade in the view>posts in @auth directive
+but the logged out person can post so we will build constructor that allow destroy and store functions for signed in persons only
+
+
+
+================================================================================================================================================================================================================================================================= 
+                         Revision Part
+api.php for api development
+channels.php for broadcasting
+console.php for any artisan commands want to register
+
+@yield blade directive which means this file to be inherited in other file
+
+
+
+
